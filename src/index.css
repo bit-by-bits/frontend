@@ -1,0 +1,25 @@
+@import url("https://rsms.me/inter/inter.css");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  @apply h-full bg-slate-900 text-white;
+}
+
+img {
+  -webkit-user-drag: none;
+}
+
+.walletConnect {
+  background-color: rgb(255 25 233) !important;
+  color: white !important;
+}
+
+.walletConnect:hover{
+  opacity: 75% !important;
+  transition: all 0.2s;
+}
+
