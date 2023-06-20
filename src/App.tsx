@@ -26,12 +26,12 @@ function App() {
       return;
     }
     if ((ownerBalance?.toNumber() || 0) > 0) {
-      alert("you have already minted!")
+      alert("Only one NFT per wallet!")
       return;
     }
 
     if (isWrongNetwork) {
-      alert("please connect to the correct network!")
+      alert("Please connect to the correct network!")
       return;
     }
 
@@ -39,7 +39,7 @@ function App() {
 
     try {
       await contract?.erc721.claim(1);
-      alert("minted successfully!")
+      alert("Minted successfully!")
       console.log(ownerBalance);
 
     }
@@ -85,7 +85,7 @@ function App() {
                 onClick={connectWallet} className="rounded-full bg-primary px-6 py-2 text-white hover:bg-opacity-75">
                 Connect Wallet
               </button> : <button onClick={mint} disabled={claiming || (ownerBalance?.toNumber() || 0) > 0} className="rounded-full bg-primary px-6 py-2 text-white hover:bg-opacity-75">
-                {claiming ? "Claiming..." : (ownerBalance?.toNumber() || 0) ? "Thankyou for becoming a part of this <3" : "Mint"}
+                {claiming ? "Claiming..." : (ownerBalance?.toNumber() || 0) ? "Thank you for becoming a part of this <3" : "Mint"}
               </button>}
             </div>
           </div>
