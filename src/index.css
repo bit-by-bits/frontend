@@ -23,7 +23,7 @@ img {
   color: white !important;
 }
 
-.walletConnect:hover{
+.walletConnect:hover {
   opacity: 75% !important;
   transition: all 0.2s;
 }

@@ -1,14 +1,26 @@
-import { useContractMetadata, useContract, useNetworkMismatch, useNFTBalance, useClaimedNFTSupply, useUnclaimedNFTSupply, metamaskWallet, useAddress, useConnect } from "@thirdweb-dev/react";
+import {
+  useContractMetadata,
+  useContract,
+  useNetworkMismatch,
+  useNFTBalance,
+  useClaimedNFTSupply,
+  useUnclaimedNFTSupply,
+  metamaskWallet,
+  useAddress,
+  useConnect,
+} from "@thirdweb-dev/react";
 import { useState } from "react";
 
 const metamaskConfig = metamaskWallet();
 
 function App() {
   const [claiming, setClaiming] = useState(false);
-  const { contract, isLoading } = useContract(import.meta.env.VITE_CONTRACT_ADDRESS);
-  const { data: contractMetadata } = useContractMetadata(contract)
-  const { data: claimedSupply } = useClaimedNFTSupply(contract)
-  const { data: unclaimedSupply } = useUnclaimedNFTSupply(contract)
+  const { contract, isLoading } = useContract(
+    import.meta.env.VITE_CONTRACT_ADDRESS
+  );
+  const { data: contractMetadata } = useContractMetadata(contract);
+  const { data: claimedSupply } = useClaimedNFTSupply(contract);
+  const { data: unclaimedSupply } = useUnclaimedNFTSupply(contract);
   const address = useAddress();
   const connect = useConnect();
   const isWrongNetwork = useNetworkMismatch();
@@ -17,21 +29,20 @@ function App() {
   const connectWallet = async () => {
     const wallet = await connect(metamaskConfig);
     console.log("connected to ", wallet);
-  }
+  };
 
   const mint = async () => {
-
     if (!address) {
       connectWallet();
       return;
     }
     if ((ownerBalance?.toNumber() || 0) > 0) {
-      alert("Only one NFT per wallet!")
+      alert("Only one NFT per wallet!");
       return;
     }
 
     if (isWrongNetwork) {
-      alert("Please connect to the correct network!")
+      alert("Please connect to the correct network!");
       return;
     }
 
@@ -39,23 +50,21 @@ function App() {
 
     try {
       await contract?.erc721.claim(1);
-      alert("Minted successfully!")
+      alert("Minted successfully!");
       console.log(ownerBalance);
-
-    }
-    catch (e) {
+    } catch (e) {
       alert(e);
     }
 
     setClaiming(false);
-  }
+  };
 
   if (!contract || !contractMetadata) {
     return (
       <div className="flex min-h-screen justify-center items-center">
         welcome to the Ankyverse..
       </div>
-    )
+    );
   }
 
   return (
@@ -73,20 +82,41 @@ function App() {
         <div className="flex flex-col items-center">
           <div className="flex w-full max-w-sm flex-col space-y-4">
             <div className="aspect-square w-full overflow-hidden rounded-md">
-              <img className="aspect-square object-cover" src={contractMetadata?.image} />
+              <img
+                className="aspect-square object-cover"
+                src={contractMetadata?.image}
+              />
             </div>
 
             <div className="flex max-w-sm justify-between">
               <p>Total Minted</p>
-              <p>{claimedSupply?.toNumber()} / {(claimedSupply?.toNumber() || 0) + (unclaimedSupply?.toNumber() || 0)}</p>
+              <p>
+                {claimedSupply?.toNumber()} /{" "}
+                {(claimedSupply?.toNumber() || 0) +
+                  (unclaimedSupply?.toNumber() || 0)}
+              </p>
             </div>
             <div className="flex justify-center">
-              {address === undefined ? <button
-                onClick={connectWallet} className="rounded-full bg-primary px-6 py-2 text-white hover:bg-opacity-75">
-                Connect Wallet
-              </button> : <button onClick={mint} disabled={claiming || (ownerBalance?.toNumber() || 0) > 0} className="rounded-full bg-primary px-6 py-2 text-white hover:bg-opacity-75">
-                {claiming ? "Claiming..." : (ownerBalance?.toNumber() || 0) ? "Thank you for becoming a part of this <3" : "Mint"}
-              </button>}
+              {address === undefined ? (
+                <button
+                  onClick={connectWallet}
+                  className="rounded-full bg-primary px-6 py-2 text-white hover:bg-opacity-75"
+                >
+                  Connect Wallet
+                </button>
+              ) : (
+                <button
+                  onClick={mint}
+                  disabled={claiming || (ownerBalance?.toNumber() || 0) > 0}
+                  className="rounded-full bg-primary px-6 py-2 text-white hover:bg-opacity-75"
+                >
+                  {claiming
+                    ? "Claiming..."
+                    : ownerBalance?.toNumber() || 0
+                    ? "Thank you for becoming a part of this <3"
+                    : "Mint"}
+                </button>
+              )}
             </div>
           </div>
         </div>
